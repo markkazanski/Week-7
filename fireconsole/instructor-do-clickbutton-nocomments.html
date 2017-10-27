@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <title>Click Button with Firebase!</title>
+
+    <!-- Links to firebase code -->
+    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- placeholder for counter -->
+    <h1>Ouch! You've clicked me <span id="click-value"></span> times!</h1>
+
+    <!-- Button -->
+    <button id="click-button">Click Me!!!!</button>
+
+    <!-- links to jQuery code -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Initializes firebase ================================================================================== -->
+    <script>
+
+var config = {
+  apiKey: "AIzaSyCL3TIpe4rU6V7P6VX5-2lXPKyKKYaMHLo",
+  authDomain: "first-project-7d64a.firebaseapp.com",
+  databaseURL: "https://first-project-7d64a.firebaseio.com",
+  projectId: "first-project-7d64a",
+  storageBucket: "first-project-7d64a.appspot.com",
+  messagingSenderId: "69478572084"
+};
+
+    firebase.initializeApp(config);
+
+    // VARIABLES
+    // --------------------------------------------------------------------------------
+
+    var database = firebase.database(); //calls firebase, creates database object
+    var clickCounter = 0;
+
+    // FUNCTIONS + EVENTS
+    // --------------------------------------------------------------------------------
+
+    $("#click-button").on("click", function() {
+      clickCounter++;
+      database.ref().set({
+        clickCount: clickCounter
+      });
+    });
+
+    // MAIN PROCESS + INITIAL CODE
+    // --------------------------------------------------------------------------------
+
+    database.ref().on("value", function(snapshot) { //when value changes
+      console.log(snapshot.val()); //outputs snaptshor of data at time of call
+      $("#click-value").html(snapshot.val().clickCount); //ads click count to document
+      clickCounter = snapshot.val().clickCount; //stors click count in local var
+    }, function(errorObject) {
+      console.log("The read failed: " + errorObject.code); //in case of error, output error
+    });
+
+    </script>
+
+  </body>
+
+</html>
